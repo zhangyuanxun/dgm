@@ -1,3 +1,3 @@
 # Deep Generative Model
-Demos about Deep Generative Model (e.g., RBM, DBM, DBN)
+Demos about Deep Generative Model (e.g., RBM, DBM, DBN, VAE, GAN)
 
