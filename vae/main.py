@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def demo_reconstruction():
     # get input data
-    mnist_data = input_data.read_data_sets('mnist_data', one_hot=True)
+    mnist_data = input_data.read_data_sets('../dataset/mnist_data', one_hot=True)
     num_sample = mnist_data.train.num_examples
     batch_size = 100
 
@@ -43,7 +43,7 @@ def demo_reconstruction():
 
 def demo_embedding():
     # get input data
-    mnist_data = input_data.read_data_sets('mnist_data', one_hot=True)
+    mnist_data = input_data.read_data_sets('../dataset/mnist_data', one_hot=True)
     num_sample = mnist_data.train.num_examples
     batch_size = 100
 
@@ -74,7 +74,7 @@ def demo_embedding():
 
 def demo_sampling():
     # get input data
-    mnist_data = input_data.read_data_sets('mnist_data', one_hot=True)
+    mnist_data = input_data.read_data_sets('../dataset/mnist_data', one_hot=True)
     num_sample = mnist_data.train.num_examples
     batch_size = 100
 

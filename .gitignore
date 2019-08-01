@@ -10,5 +10,4 @@
 *.pyc
 
 # add models folder not content
-/gan/anime_data
-/vae/mnist_data
+/dataset/**/*.*
