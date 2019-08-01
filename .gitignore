@@ -11,3 +11,4 @@
 
 # add models folder not content
 /dataset/**/*.*
+!/dataset/.gitkeep
