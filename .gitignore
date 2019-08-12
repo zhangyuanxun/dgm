@@ -9,6 +9,13 @@
 # pyc files
 *.pyc
 
+# output file
+*.pdf
+*.png
+
+# shell file
+*.sh
+
 # add models folder not content
 /dataset/**/*.*
 !/dataset/.gitkeep

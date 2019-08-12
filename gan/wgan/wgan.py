@@ -18,7 +18,7 @@ def sample_z_fn(m, n):
     return np.random.uniform(-1., 1., size=[m, n])
 
 
-class VanillaGAN(object):
+class WGAN(object):
     def __init__(self, sess, num_epoch, batch_size, dataset, input_dim, z_dim):
         self.sess = sess
         self.num_epoch = num_epoch
@@ -26,7 +26,7 @@ class VanillaGAN(object):
         self.dataset = dataset
         self.input_dim = input_dim
         self.z_dim = z_dim
-        self.d_steps = 1
+        self.d_steps = 5
         self.g_steps = 1
 
     def build_net(self):
@@ -43,26 +43,22 @@ class VanillaGAN(object):
         d_fake = self._discriminator(g, reuse=False)
         d_real = self._discriminator(self.x, reuse=True)
 
-        # loss for discriminator
-        d_loss_real = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(
-            logits=d_real, labels=tf.ones_like(d_real)))
-        d_loss_fake = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(
-            logits=d_fake, labels=tf.zeros_like(d_fake)))
-
         # discriminator loss
-        self.d_loss = d_loss_real + d_loss_fake
+        self.d_loss = tf.reduce_mean(d_real) - tf.reduce_mean(d_fake)
 
         # generator loss
-        self.g_loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(
-            logits=d_fake, labels=tf.ones_like(d_fake)))
+        self.g_loss = tf.reduce_mean(d_fake)
 
         """ Training """
         # optimizers
         d_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'discriminator')
         g_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'generator')
 
-        self.d_optimizer = tf.train.AdamOptimizer().minimize(self.d_loss, var_list=d_vars)
-        self.g_optimizer = tf.train.AdamOptimizer().minimize(self.g_loss, var_list=g_vars)
+        self.d_optimizer = tf.train.AdamOptimizer().minimize(-self.d_loss, var_list=d_vars)
+        self.g_optimizer = tf.train.AdamOptimizer().minimize(-self.g_loss, var_list=g_vars)
+
+        """ Weight cliping """
+        self.d_clip = [p.assign(tf.clip_by_value(p, -0.01, 0.01)) for p in d_vars]
 
         """" Testing """
         self.sample_x = self._generator(self.z, reuse=True)
@@ -100,7 +96,8 @@ class VanillaGAN(object):
                 # sample random noises
                 z_sample = sample_z_fn(self.batch_size, self.z_dim)
 
-                _, d_loss = self.sess.run([self.d_optimizer, self.d_loss], feed_dict={self.x: X, self.z: z_sample})
+                _, d_loss, _ = self.sess.run([self.d_optimizer, self.d_loss, self.d_clip],
+                                             feed_dict={self.x: X, self.z: z_sample})
                 D_loss += d_loss
 
             D_loss /= self.d_steps
@@ -118,7 +115,7 @@ class VanillaGAN(object):
             # sample data for testing
             if epoch % 2000 == 0:
                 z_sample = sample_z_fn(16, self.z_dim)
-                self.visualize(epoch + 1, z_sample)
+                self.visualize(epoch, z_sample)
 
             # display current loss
             print "Epoch: %08d, d_loss= %.4f, g_loss=%.4f" % (epoch + 1, D_loss, G_loss)
