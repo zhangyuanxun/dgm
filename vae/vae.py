@@ -87,7 +87,7 @@ class VAE(object):
         self.z_mean, self.z_log_var = self._encoder_network(weights['encoder_weights'], weights['encoder_biases'])
 
         # sample z from Gaussian distribution z ~ q(z | x)
-        epsilon = tf.random_normal((self.batch_size, self.network_architecture["n_z"]), 0, 1, dtype=tf.float32)
+        epsilon = tf.random_normal(shape=tf.shape(self.z_mean), mean=0, stddev=1, dtype=tf.float32)
 
         # z = mu + sigma * epsilon
         self.z = tf.add(self.z_mean, tf.multiply(tf.sqrt(tf.exp(self.z_log_var)), epsilon))
