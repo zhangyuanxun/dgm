@@ -17,5 +17,6 @@
 *.sh
 
 # add models folder not content
+/venv/
 /dataset/**/*.*
 !/dataset/.gitkeep

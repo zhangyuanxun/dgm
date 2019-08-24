@@ -12,7 +12,7 @@ import tensorflow as tf
 import random
 from tensorflow.contrib import layers
 import sys
-
+import os
 
 def sample_z_fn(m, n):
     return np.random.uniform(-1., 1., size=[m, n])
@@ -138,7 +138,9 @@ class VanillaGAN(object):
             ax.set_aspect('equal')
             plt.imshow(sample.reshape(28, 28), cmap='Greys_r')
 
-        file_name = 'output/' + 'epoch_%08d' % epoch + '.pdf'
-        with PdfPages(file_name) as pdf:
+        if not os.path.isdir('output'):
+            os.makedirs('output')
+
+        with PdfPages('output/epoch_{}.pdf'.format(str(epoch).zfill(6))) as pdf:
             pdf.savefig(fig)
         plt.close()
