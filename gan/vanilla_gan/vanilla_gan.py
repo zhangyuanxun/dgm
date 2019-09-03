@@ -141,6 +141,6 @@ class VanillaGAN(object):
         if not os.path.isdir('output'):
             os.makedirs('output')
 
-        with PdfPages('output/epoch_{}.pdf'.format(str(epoch).zfill(6))) as pdf:
+        with PdfPages('output/epoch_{}.pdf'.format(str(epoch).zfill(8))) as pdf:
             pdf.savefig(fig)
         plt.close()

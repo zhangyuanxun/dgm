@@ -86,10 +86,10 @@ class VAE(object):
         # Use recognition network to determine mean and (log) variance of Gaussian distribution in latent space
         self.z_mean, self.z_log_var = self._encoder_network(weights['encoder_weights'], weights['encoder_biases'])
 
-        # sample z from Gaussian distribution z ~ q(z | x)
+        # sample noise
         epsilon = tf.random_normal(shape=tf.shape(self.z_mean), mean=0, stddev=1, dtype=tf.float32)
 
-        # z = mu + sigma * epsilon
+        # z = mu + sigma * epsilon to approximate from Gaussian distribution z ~ q(z | x)
         self.z = tf.add(self.z_mean, tf.multiply(tf.sqrt(tf.exp(self.z_log_var)), epsilon))
 
         # build generator network (decoder network)
