@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def demo_reconstruction():
     # get input data
-    mnist_data = input_data.read_data_sets('../dataset/mnist_data', one_hot=True)
+    mnist_data = input_data.read_data_sets('../../dataset/mnist_data', one_hot=True)
     num_sample = mnist_data.train.num_examples
     batch_size = 100
 
@@ -43,7 +43,7 @@ def demo_reconstruction():
 
 def demo_embedding():
     # get input data
-    mnist_data = input_data.read_data_sets('../dataset/mnist_data', one_hot=True)
+    mnist_data = input_data.read_data_sets('../../dataset/mnist_data', one_hot=True)
     num_sample = mnist_data.train.num_examples
     batch_size = 100
 
@@ -74,7 +74,7 @@ def demo_embedding():
 
 def demo_sampling():
     # get input data
-    mnist_data = input_data.read_data_sets('../dataset/mnist_data', one_hot=True)
+    mnist_data = input_data.read_data_sets('../../dataset/mnist_data', one_hot=True)
     num_sample = mnist_data.train.num_examples
     batch_size = 100
 
@@ -86,7 +86,6 @@ def demo_sampling():
              n_input=784,             # MNIST data input (img shape: 28*28)
              n_z=2)                   # dimensionality of latent space
 
-    network_architecture = {}
     # define model
     vae_model = VAE(network_architecture, batch_size=batch_size)
 
@@ -112,5 +111,4 @@ def demo_sampling():
 
 
 if __name__ == '__main__':
-    # get input data
-    demo_reconstruction()
+    demo_sampling()
